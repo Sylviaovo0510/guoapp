@@ -48,7 +48,7 @@ jobs:
       - run: go test -race ./...
         working-directory: native
         continue-on-error: true
-      - run: go test -race -ldflags="-X duanjuapp/native/core.buildAllSources=true" ./...
+      - run: go test -race -ldflags="-X duanjuapp/native/core.dAllSources=true" ./...
         working-directory: native
         continue-on-error: true
 
@@ -102,7 +102,7 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      - run: python scripts/build_android.py ${{ matrix.arguments }}
+      - run: python scripts/d_android.py ${{ matrix.arguments }}
       - name: 校验 APK 签名证书
         if: steps.signing.outputs.release == 'true'
         shell: bash
@@ -113,7 +113,7 @@ jobs:
             echo "未设置仓库变量 ANDROID_CERT_SHA256，跳过证书指纹比对。" >&2
             exit 0
           fi
-          apksigner=$(find "${ANDROID_HOME}/build-tools" -name apksigner -type f 2>/dev/null | sort | tail -n1 || true)
+          apksigner=$(find "${ANDROID_HOME}/d-tools" -name apksigner -type f 2>/dev/null | sort | tail -n1 || true)
           if [ -z "$apksigner" ]; then
             sdkmanager 'build-tools;35.0.0' >/dev/null
             apksigner=$(find "${ANDROID_HOME}/build-tools" -name apksigner -type f | sort | tail -n1)
